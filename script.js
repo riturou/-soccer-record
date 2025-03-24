@@ -14,7 +14,8 @@ const menus = {
     }
 };
 
-// ランダム練習メニュー表示
+let editIndex = null; // 編集中のインデックスを管理
+
 function showRandomMenu() {
     const keys = Object.keys(menus);
     const randomKey = keys[Math.floor(Math.random() * keys.length)];
@@ -27,7 +28,6 @@ function showRandomMenu() {
     document.getElementById('menuContent').innerHTML = html;
 }
 
-// 記録保存（画像をBase64形式で保存）
 function saveRecord() {
     const date = document.getElementById('date').value;
     const menu = document.getElementById('menu').value;
@@ -53,19 +53,23 @@ function saveRecord() {
     }
 }
 
-// ローカルストレージ保存処理
 function saveRecordToLocalStorage(record) {
     let records = JSON.parse(localStorage.getItem('records')) || [];
-    records.push(record);
+    if (editIndex !== null) {
+        // 編集モードの場合
+        records[editIndex] = record;
+        editIndex = null;
+        alert("編集を保存しました！");
+    } else {
+        records.push(record);
+        alert("新しい記録を保存しました！");
+    }
     localStorage.setItem('records', JSON.stringify(records));
-
-    alert("保存しました！");
     displayRecords();
     renderCalendar();
     document.getElementById('recordForm').reset();
 }
 
-// 記録を一覧で表示（削除ボタン付き）
 function displayRecords() {
     let records = JSON.parse(localStorage.getItem('records')) || [];
     const list = document.getElementById('recordList');
@@ -75,13 +79,13 @@ function displayRecords() {
             <strong>${record.date}</strong> - ${menus[record.menu].name}<br>
             ${record.memo ? "メモ: " + record.memo + "<br>" : ""}
             ${record.photoURL ? `<img src="${record.photoURL}" width="100"><br>` : ""}
+            <button onclick="editRecord(${index})">編集</button>
             <button onclick="deleteRecord(${index})">削除</button>
         </li>`;
         list.innerHTML += li;
     });
 }
 
-// 指定の記録を削除
 function deleteRecord(index) {
     if (confirm("この記録を削除しますか？")) {
         let records = JSON.parse(localStorage.getItem('records')) || [];
@@ -93,12 +97,19 @@ function deleteRecord(index) {
     }
 }
 
-// カレンダーを表示する関数
+function editRecord(index) {
+    const records = JSON.parse(localStorage.getItem('records')) || [];
+    const record = records[index];
+    document.getElementById('date').value = record.date;
+    document.getElementById('menu').value = record.menu;
+    document.getElementById('memo').value = record.memo;
+    editIndex = index;
+    alert("編集モードになりました！内容を変更して「保存」を押してください。");
+}
+
 function renderCalendar() {
     const calendarEl = document.getElementById('calendar');
     const records = JSON.parse(localStorage.getItem('records')) || [];
-
-    // カレンダー初期化
     calendarEl.innerHTML = "";
 
     const events = records.map(record => ({
@@ -125,7 +136,6 @@ function renderCalendar() {
     calendar.render();
 }
 
-// ページ読み込み時の初期化
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('randomMenuButton').addEventListener('click', showRandomMenu);
     displayRecords();
