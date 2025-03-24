@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>サッカー練習記録</title>
+    <link rel="stylesheet" href="style.css">
+<!-- FullCalendar CSS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/main.min.css" rel="stylesheet" />
+</head>
+<body>
+    <h1>⚽ りつき練習記録 ⚽</h1>
+    
+    <div class="recommendation">
+        <h2>今日のおすすめメニュー</h2>
+        <div id="randomMenu">
+            <button id="randomMenuButton">提案を見る</button>
+            <div id="menuContent"></div>
+        </div>
+    </div>
+
+    <h2>今月の記録</h2>
+    <div id="calendar"></div>
+
+    <h2>新しい記録を追加</h2>
+    <form id="recordForm">
+        <label>日付: <input type="date" id="date"></label><br>
+        <label>メニュー: 
+            <select id="menu">
+                <option value="A">メニューA（ドリブル＋動画リンク）</option>
+                <option value="B">メニューB（リフティング＋動画リンク）</option>
+            </select>
+        </label><br>
+        <label>メモ: <textarea id="memo"></textarea></label><br>
+        <label>写真: <input type="file" id="photo"></label><br>
+        <button type="button" onclick="saveRecord()">保存</button>
+    </form>
+
+    <h2>記録一覧</h2>
+    <ul id="recordList"></ul>
+
+    <script src="script.js"></script>
+<!-- FullCalendar JS -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/main.min.js"></script>
+</body>
+</html>

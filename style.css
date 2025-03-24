@@ -1,0 +1,72 @@
+body {
+    font-family: 'Helvetica Neue', sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+h1, h2 {
+    color: #fff;
+    text-align: center;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.recommendation, form, #recordList li {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.6s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+form label {
+    display: block;
+    margin: 12px 0 6px;
+    font-weight: bold;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+button {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(45deg, #FF6FD8, #3813C2);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1em;
+}
+
+button:hover {
+    transform: scale(1.08);
+    opacity: 0.9;
+}
+
+#recordList li img {
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    max-width: 100%;
+}
+
+@media screen and (max-width: 600px) {
+    h1 { font-size: 1.8em; }
+    h2 { font-size: 1.4em; }
+}
