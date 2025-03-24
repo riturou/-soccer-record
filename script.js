@@ -40,23 +40,39 @@ function saveRecord() {
     }
 
     if (photoInput.files.length > 0) {
+        const file = photoInput.files[0];
         const reader = new FileReader();
         reader.onload = function (e) {
-            const photoDataURL = e.target.result;
-            const record = { date, menu, memo, photoURL: photoDataURL };
-            saveRecordToLocalStorage(record);
+            resizeImage(e.target.result, function(resizedImage) {
+                const record = { date, menu, memo, photoURL: resizedImage };
+                saveRecordToLocalStorage(record);
+            });
         };
-        reader.readAsDataURL(photoInput.files[0]);
+        reader.readAsDataURL(file);
     } else {
         const record = { date, menu, memo, photoURL: "" };
         saveRecordToLocalStorage(record);
     }
 }
 
+function resizeImage(dataURL, callback) {
+    const img = new Image();
+    img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const scale = 500 / img.width;  // 最大幅500px
+        canvas.width = 500;
+        canvas.height = img.height * scale;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        const resizedDataUrl = canvas.toDataURL('image/jpeg', 0.7); // 圧縮率70%
+        callback(resizedDataUrl);
+    };
+    img.src = dataURL;
+}
+
 function saveRecordToLocalStorage(record) {
     let records = JSON.parse(localStorage.getItem('records')) || [];
     if (editIndex !== null) {
-        // 編集モードの場合
         records[editIndex] = record;
         editIndex = null;
         alert("編集を保存しました！");
