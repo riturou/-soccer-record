@@ -65,19 +65,32 @@ function saveRecordToLocalStorage(record) {
     document.getElementById('recordForm').reset();
 }
 
-// 記録を一覧で表示
+// 記録を一覧で表示（削除ボタン付き）
 function displayRecords() {
     let records = JSON.parse(localStorage.getItem('records')) || [];
     const list = document.getElementById('recordList');
     list.innerHTML = "";
-    records.forEach(record => {
+    records.forEach((record, index) => {
         let li = `<li>
             <strong>${record.date}</strong> - ${menus[record.menu].name}<br>
             ${record.memo ? "メモ: " + record.memo + "<br>" : ""}
-            ${record.photoURL ? `<img src="${record.photoURL}" width="100">` : ""}
+            ${record.photoURL ? `<img src="${record.photoURL}" width="100"><br>` : ""}
+            <button onclick="deleteRecord(${index})">削除</button>
         </li>`;
         list.innerHTML += li;
     });
+}
+
+// 指定の記録を削除
+function deleteRecord(index) {
+    if (confirm("この記録を削除しますか？")) {
+        let records = JSON.parse(localStorage.getItem('records')) || [];
+        records.splice(index, 1);
+        localStorage.setItem('records', JSON.stringify(records));
+        displayRecords();
+        renderCalendar();
+        alert("削除しました！");
+    }
 }
 
 // カレンダーを表示する関数
@@ -85,7 +98,7 @@ function renderCalendar() {
     const calendarEl = document.getElementById('calendar');
     const records = JSON.parse(localStorage.getItem('records')) || [];
 
-    // 既存のカレンダーを一度初期化
+    // カレンダー初期化
     calendarEl.innerHTML = "";
 
     const events = records.map(record => ({
