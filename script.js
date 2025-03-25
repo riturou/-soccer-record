@@ -11,6 +11,12 @@ const menus = {
         links: [
             "https://youtu.be/MsOVrZB4wRo?feature=shared"
         ]
+    },
+    C: {
+        name: "メニューC（パターン練習）",
+        links: [
+            "https://youtu.be/AijVmQn_YRc?feature=shared"
+        ]
     }
 };
 
